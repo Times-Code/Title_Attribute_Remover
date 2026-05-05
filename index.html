@@ -14,6 +14,7 @@
     .container {
       max-width: 1100px;
       margin: auto;
+      position: relative;
     }
 
     h2 {
@@ -28,8 +29,8 @@
     }
 
     textarea {
-      width: 98%;
-      height: 300px;
+      width: 100%;
+      height: 220px;
       padding: 10px;
       font-family: monospace;
       border: 1px solid #ccc;
@@ -46,16 +47,14 @@
       padding: 10px 18px;
       margin: 5px;
       border: none;
-      background: #000000;
+      background: #007bff;
       color: white;
       border-radius: 6px;
       cursor: pointer;
     }
 
     button:hover {
-      background: #ffffff;
-      color: #000000;
-      border: 1px solid #000000;
+      background: #0056b3;
     }
 
     .removed-list {
@@ -79,6 +78,24 @@
       border-bottom: none;
     }
 
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 6px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
     @media (max-width: 768px) {
       .grid {
         grid-template-columns: 1fr;
@@ -99,13 +116,16 @@
   <div class="actions">
     <button onclick="removeTitles()">Remove title attributes</button>
     <button onclick="copyOutput()">Copy Output</button>
+    <button onclick="clearAll()">Clear</button>
   </div>
 
   <div id="removedContainer" class="removed-list" style="display:none;">
     <strong>Removed title attributes:</strong>
     <div id="removedItems"></div>
   </div>
- 
+</div>
+
+<div id="toast" class="toast">Code Copied</div>
 
 <script>
   function removeTitles() {
@@ -140,7 +160,24 @@
     const output = document.getElementById('output');
     output.select();
     document.execCommand('copy');
-    alert('Copied to clipboard!');
+
+    showToast();
+  }
+
+  function clearAll() {
+    document.getElementById('input').value = '';
+    document.getElementById('output').value = '';
+    document.getElementById('removedItems').innerHTML = '';
+    document.getElementById('removedContainer').style.display = 'none';
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 8000);
   }
 </script>
 
