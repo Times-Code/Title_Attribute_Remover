@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Remove Title Attributes Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    textarea {
+      width: 98%;
+      height: 300px;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 5px;
+      border: none;
+      background: #000000;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #000000;
+    }
+
+    .removed-list {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .removed-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .removed-item:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Title Attribute Remover</h2>
+
+  <div class="grid">
+    <textarea id="input" placeholder="Paste your HTML here..."></textarea>
+    <textarea id="output" placeholder="Output will appear here..."></textarea>
+  </div>
+
+  <div class="actions">
+    <button onclick="removeTitles()">Remove title attributes</button>
+    <button onclick="copyOutput()">Copy Output</button>
+  </div>
+
+  <div id="removedContainer" class="removed-list" style="display:none;">
+    <strong>Removed title attributes:</strong>
+    <div id="removedItems"></div>
+  </div>
+ 
+
+<script>
+  function removeTitles() {
+    const input = document.getElementById('input').value;
+
+    const matches = [...input.matchAll(/title="[^"]*"/gi)];
+    const removedValues = matches.map(m => m[0]);
+
+    const cleaned = input.replace(/\s*title="[^"]*"/gi, '');
+
+    document.getElementById('output').value = cleaned;
+
+    const container = document.getElementById('removedContainer');
+    const list = document.getElementById('removedItems');
+
+    list.innerHTML = '';
+
+    if (removedValues.length > 0) {
+      container.style.display = 'block';
+      removedValues.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'removed-item';
+        div.textContent = item;
+        list.appendChild(div);
+      });
+    } else {
+      container.style.display = 'none';
+    }
+  }
+
+  function copyOutput() {
+    const output = document.getElementById('output');
+    output.select();
+    document.execCommand('copy');
+    alert('Copied to clipboard!');
+  }
+</script>
+
+</body>
+</html>
